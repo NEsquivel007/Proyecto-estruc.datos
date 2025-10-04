@@ -1,3 +1,4 @@
+
 import java.time.LocalDate;
 
 public class listaProductos {
@@ -8,79 +9,103 @@ public class listaProductos {
         Primero = null;
     }
 
+    // getters
+
     public productos getprimero() {
         return Primero;
     }
+
+    // setter
 
     public void setprimero(productos nuevoPrimero) {
         Primero = nuevoPrimero;
     }
 
-    // insertar al inicio
+    // metodo insertar
+
     public void insertarProductosInicio(String nombreProducto, double precioProducto,
             String categoriaProducto, LocalDate fechaVencimientoProducto,
             int cantidadProducto) {
+
         productos nuevaListaProductos = new productos(nombreProducto, precioProducto,
                 categoriaProducto, fechaVencimientoProducto,
                 cantidadProducto);
         nuevaListaProductos.setSiguiente(Primero);
         setprimero(nuevaListaProductos);
+
     }
 
-    // insertar al final
+    // metodo buscar
+
+    public productos buscaProductos(String nombreBuscar) {
+        productos ProductoActual = Primero;
+        while (ProductoActual != null && !ProductoActual.getNombre().equals(nombreBuscar)) {
+            ProductoActual = ProductoActual.getSiguiente();
+        }
+        if (ProductoActual != null) {
+            // System.out.println("El producto buscado se encuentra en el inventario ");
+        } else {
+            // System.out.println("El producto buscado no se ha encontrado en el
+            // inventario");
+        }
+        return ProductoActual;
+    }
+
+    // insertar un producto al final de la lista
+
     public void insertarProductosFinal(String nombreProducto, double precioProducto,
             String categoriaProducto, LocalDate fechaVencimientoProducto,
             int cantidadProducto) {
-        productos nuevoProducto = new productos(nombreProducto, precioProducto,
-                categoriaProducto, fechaVencimientoProducto,
-                cantidadProducto);
+        productos nuevProducto = new productos(nombreProducto, precioProducto, categoriaProducto,
+                fechaVencimientoProducto, cantidadProducto);
+        if ((Primero == null)) {
+            setprimero(nuevProducto);
+            return;
+        }
+        productos ProductoTemp = Primero;
+        while (ProductoTemp.getSiguiente() != null) {
+            ProductoTemp = ProductoTemp.getSiguiente();
+        }
+        ProductoTemp.setSiguiente(nuevProducto);
+    }
+
+    // metodo para eliminar un Producto
+
+    public productos eliminaProductos(String nombreElimanar) {
         if (Primero == null) {
-            setprimero(nuevoProducto);
-            return;
+            System.out.println("la lista se encuentra vacia");
+            return null;
         }
-        productos temp = Primero;
-        while (temp.getSiguiente() != null) {
-            temp = temp.getSiguiente();
-        }
-        temp.setSiguiente(nuevoProducto);
-    }
-
-    // buscar, eliminar y mostrar no cambian mucho la verdad :)
-    public productos buscaProductos(String nombreBuscar) {
-        productos actual = Primero;
-        while (actual != null && !actual.getNombre().equalsIgnoreCase(nombreBuscar)) {
-            actual = actual.getSiguiente();
-        }
-        return actual;
-    }
-
-    public void eliminaProductos(String nombre) {
-        if (Primero == null)
-            return;
-        // Si el producto a eliminar es el primero
-        if (Primero.getNombre().equalsIgnoreCase(nombre)) {
+        if (Primero.getNombre().equals(nombreElimanar)) {
             Primero = Primero.getSiguiente();
-            return;
         }
-        productos actual = Primero;
-        while (actual.getSiguiente() != null) {
-            if (actual.getSiguiente().getNombre().equalsIgnoreCase(nombre)) {
-                actual.setSiguiente(actual.getSiguiente().getSiguiente());
-                return;
-            }
-            actual = actual.getSiguiente();
+
+        productos ProductoActu = Primero;
+        while (ProductoActu.getSiguiente() != null && ProductoActu.getSiguiente().getNombre().equals(nombreElimanar)) {
+            ProductoActu = ProductoActu.getSiguiente();
         }
+        if (ProductoActu.getSiguiente() != null) {
+            System.out.println("El producto budcado se encontro en la estructura");
+            ProductoActu.setSiguiente(ProductoActu.getSiguiente().getSiguiente());
+        } else {
+            System.out.println("El producto no se ha encontrado");
+        }
+
+        return ProductoActu;
     }
+
+    // metodo para mostrar productos
 
     public void MostrarProductos() {
         if (Primero == null) {
-            System.out.println("La lista está vacía");
+            System.out.println("la lista esta vacia");
             return;
         }
-        productos actual = Primero;
-        while (actual != null) {
-            System.out.println(actual);
-            actual = actual.getSiguiente();
+        productos ProductoActual = Primero;
+        while (ProductoActual != null) {
+            System.out.println(ProductoActual);
+            ProductoActual = ProductoActual.getSiguiente();
         }
     }
+
 }
