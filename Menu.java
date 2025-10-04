@@ -7,12 +7,12 @@ public class Menu {
     private final PrintStream out = System.out;
     private final listaProductos lista; // atributo para manejar productos
 
-    // 🔹 Constructor que recibe la lista
+    // Constructor que recibe la lista
     public Menu(listaProductos lista) {
         this.lista = lista;
     }
 
-    // 🔹 Método público que ejecuta el menú
+    // Método público que ejecuta el menú
     public void run() throws IOException {
         int opcion;
         do {
@@ -23,15 +23,15 @@ public class Menu {
                 case 2 -> buscarProducto();
                 case 3 -> eliminarProducto();
                 case 4 -> mostrarProductos();
-                case 5 -> out.println("Saliendo...");
-                default -> out.println("❗ Opción inválida. Intenta de nuevo.");
+                case 5 -> out.println("Sesión terminada.");
+                default -> out.println(" Opción inválida. Intenta de nuevo.");
             }
 
             out.println(); // línea en blanco
         } while (opcion != 5);
     }
 
-    // ================== Opciones del menú ==================
+    // métodos privados para cada opción del menú
 
     private void ingresarDatos() throws IOException {
         out.println("=== Ingresar datos del producto ===");
@@ -41,25 +41,26 @@ public class Menu {
         String fechaTexto = leerTexto("Fecha de vencimiento (AAAA-MM-DD o vacío si no aplica): ");
         LocalDate fechaVenc = fechaTexto.isBlank() ? null : LocalDate.parse(fechaTexto);
         int cantidad = leerEntero("Cantidad: ");
-
         int donde;
+
+        // sub menú para elegir dónde insertar
         do {
             out.println("\n--- ¿Dónde insertar? ---");
-            out.println("1) Insertar al INICIO");
-            out.println("2) Insertar al FINAL");
+            out.println("1) Insertar al inicio");
+            out.println("2) Insertar al final");
             out.println("0) Cancelar");
             donde = leerEntero("Opción: ");
 
             if (donde == 1) {
                 lista.insertarProductosInicio(nombre, precio, categoria, fechaVenc, cantidad);
-                out.println("✔ Producto insertado al INICIO.");
+                out.println(" Producto insertado al inicio.");
             } else if (donde == 2) {
                 lista.insertarProductosFinal(nombre, precio, categoria, fechaVenc, cantidad);
-                out.println("✔ Producto insertado al FINAL.");
+                out.println(" Producto insertado al final.");
             } else if (donde == 0) {
                 out.println("Operación cancelada.");
             } else {
-                out.println("❗ Opción inválida.");
+                out.println(" Opción inválida.");
             }
         } while (donde != 0 && donde != 1 && donde != 2);
     }
@@ -79,8 +80,7 @@ public class Menu {
         lista.MostrarProductos();
     }
 
-    // ================== Helpers ==================
-
+    // menu completo
     private int mostrarMenuYLeerOpcion() throws IOException {
         out.println("============ Supermercado ===========");
         out.println("1) Ingresar datos (con submenú de inserción)");
@@ -91,6 +91,7 @@ public class Menu {
         return leerEntero("Opción: ");
     }
 
+    // validaciones de entrada
     private String leerTexto(String msg) throws IOException {
         out.print(msg);
         return in.readLine().trim();
@@ -113,7 +114,7 @@ public class Menu {
                 out.print(msg);
                 return Double.parseDouble(in.readLine().trim());
             } catch (NumberFormatException e) {
-                out.println("Ingrese un número decimal válido (use punto).");
+                out.println("Ingrese un número decimal válido.");
             }
         }
     }
